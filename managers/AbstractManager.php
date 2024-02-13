@@ -1,16 +1,25 @@
 <?php
-    class AbstractManager
+
+abstract class AbstractManager
+{
+    protected PDO $db;
+
+    public function __construct()
     {
-        protected PDO $db;
-        
-        public function __construct() {
-            $host = "db.3wa.io";
-            $port = "3306";
-            $dbname = "eddyfrair_grp_distorsion";
-            $connexionString = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8";
-            
-            $user = "eddyfrair";
-            $password = "be1462e6ceeb160384371a8dad76c812";
-            $this->db = new PDO($connexionString, $user, $password);
-        }
+        require_once __DIR__ . '/../vendor/autoload.php';
+
+        // Chargement des variables d'environnement
+        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__."/../config");
+        $dotenv->load();
+        // $dbInfo = $this->getDatabaseInfo();
+
+        $connexion = "mysql:host=".$_ENV['DB_USER'].";port=3306;charset=utf8;dbname=".$_ENV['DB_NAME'];
+        $this->db = new PDO(
+            $connexion,
+            $_ENV['DB_USER'],
+            $_ENV['DB_PASS']
+        );
     }
+
+
+}
